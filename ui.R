@@ -15,18 +15,30 @@ shinyUI(fluidPage(
     # Application title
     titlePanel("KalevalApp"),
 
-    # Sidebar with a slider input for number of bins
-    sidebarLayout(
-        sidebarPanel(
-          textInput(inputId = "etsittava", 
-                    label = "Etsi", 
-                    value = ""),
-          actionButton("etsi", "Etsi tästä")
-        ),
-
-        # Show a plot of the generated distribution
-        mainPanel(
-          tableOutput("tulokset")
-        )
+    tabsetPanel(
+      tabPanel("Etsi Kalevalasta",
+               
+               sidebarLayout(
+                 sidebarPanel(
+                   textInput(inputId = "etsittava", 
+                             label = "Etsi", 
+                             value = ""),
+                   actionButton("etsi", "Etsi tästä"),
+                   tableOutput("tulokset")
+                 ),
+                 
+                 mainPanel(
+                   
+                 )
+               )),
+      
+      tabPanel("Kalevalan naiset ja miehet",
+               
+               sidebarLayout(
+                 sidebarPanel(),
+                 mainPanel()
+               ))
     )
+    
+    
 ))
