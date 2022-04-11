@@ -14,7 +14,7 @@ source("R/lataa_teksti.R")
 shinyServer(function(input, output) {
 
   re <- eventReactive(input$etsi, 
-                      {etsi_sana(input$etsittava, teksti)})
+                      {etsi_rivi(input$etsittava, teksti)})
   
     output$tulokset <- renderTable(expr = {re()})
 

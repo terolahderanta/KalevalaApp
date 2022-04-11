@@ -92,16 +92,44 @@ lataa_data <- function(tiedostosijainti = "data/kalevala.txt"){
   return(teksti)
 }
 
-# Palauta rivit, joissa sana mainitaan
-etsi_sana <- function(sana, teksti){
-  rivi_id <- teksti |> 
+# Palauta rivien idt, joissa sana mainitaan
+etsi_rivi_id <- function(sana, teksti){
+  teksti |> 
     mutate(Teksti = Teksti |> 
-           # Poista välimerkit
-           str_replace_all("[:punct:]", replacement = "") |>
-           # Vain pienet kirjaimet
-           str_to_lower()) |> 
+             # Poista välimerkit
+             str_replace_all("[:punct:]", replacement = "") |>
+             # Vain pienet kirjaimet
+             str_to_lower()) |> 
     filter(str_detect(Teksti, sana)) |> 
     pull("Rivin numero")
+}
+
+# Palauta rivit, joissa sana mainitaan
+etsi_rivi <- function(sana, teksti){
+  
+  # Etsi rivien idt
+  rivi_id <- etsi_rivi_id(sana, teksti)
     
+  # Palauta id:tä vastaavat rivit
   teksti |> filter(`Rivin numero` %in% rivi_id)
+}
+
+# Palauta rivit ja sen ympäriltä rivit, joissa sana mainitaan
+etsi_rivit <- function(sana, teksti, marginaali = 1){
+  
+  # Etsi rivien idt
+  rivi_id <- etsi_rivi_id(sana, teksti)
+  
+  rivit_id <- c(
+    rep(rivi_id, marginaali) - rep(marginaali:1, each = length(rivi_id)),
+    rivi_id,
+    rep(rivi_id, marginaali) + rep(1:marginaali, each = length(rivi_id))
+    
+  ) |> matrix(nrow = length(rivi_id), ncol = marginaali * 2 + 1, byrow = FALSE)
+  
+  # TODO: Palauta vielä kaikki rivit_id matriisin rivit tibblenä
+  # TODO: Voiko tibblessä yhdellä havainnon muuttujalla olla monta riviä tekstiä?
+  
+  # Palauta id:tä vastaavat rivit
+  #teksti |> filter(`Rivin numero` %in% rivi_id)
 }
