@@ -111,7 +111,9 @@ etsi_rivi <- function(sana, teksti){
   rivi_id <- etsi_rivi_id(sana, teksti)
     
   # Palauta id:tä vastaavat rivit
-  teksti |> filter(`Rivin numero` %in% rivi_id)
+  teksti |> 
+    filter(`Rivin numero` %in% rivi_id) |> 
+    select("Rivin numero", "Teksti", "Runon numero")
 }
 
 # Palauta rivit ja sen ympäriltä rivit, joissa sana mainitaan
